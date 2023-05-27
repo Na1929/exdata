@@ -1,0 +1,1076 @@
+---
+title: 'Analysis for Experiment 2'
+author: "KN"
+date: '`r Sys.Date()`'
+output: 
+        html_document:
+         toc: true
+         toc_depth: 3
+         toc_float: true
+         number_section: true
+---
+
+For output from ibex farm 
+
+About
+=====
+- SPR conducted at Lancers ibex, May 8, 2018  
+- 116 participants    
+- Target items: 24  
+- Filler items: 48  
+  
+
+
+Conditions:  
+Ds. Durative × Simplex    
+Dr. Durative x Reduplicated  
+Cs. Non-durative x Simplex  
+Cr. Non-durative x Reduplicated  
+
+[["Ds",1], "DashedSentenceNoSpace",  
+{s: "生徒が しばらく 黒板を ちらっと 見たので 先生が カンニングを 疑った。"},  
+"Question", {q: "生徒は黒板をしばらく見た。", hasCorrect:0}],
+[["Dr",1], "DashedSentenceNoSpace",  
+{s: "生徒が しばらく 黒板を ちらちら 見たので 先生が カンニングを 疑った。"}, "Question",  
+{q: "生徒は黒板をしばらく見た。", hasCorrect:0}],
+[["Cs",1], "DashedSentenceNoSpace",  
+{s: "生徒が その時 黒板を ちらっと 見たので 先生が カンニングを 疑った。"},  
+"Question", {q: "生徒は黒板をしばらく見た。", hasCorrect:1}],
+[["Cr",1], "DashedSentenceNoSpace",  
+{s: "生徒が その時 黒板を ちらちら 見たので 先生が カンニングを 疑った。"},  
+"Question", {q: "生徒は黒板をしばらく見た。", hasCorrect:1}],  
+
+
+
+
+
+##### Load libraries
+
+```{r}
+#library(lme4)
+library(lmerTest)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(reshape)
+library(gdata)      
+library(MASS)
+```
+
+
+##### Declare the expt name that is relevant.
+```{r}
+ex<-"e"
+
+# critical region
+criticalregion<-4
+
+# how far from the critical region do you want the plot to cover?
+crplus<-3
+
+# plot legend（凡例）のならび順はデフォルトではアルファベット順
+# 逆順にしたい場合はここを1にする
+revorderA <- 1  # ab vs cd
+revorderB <- 1  # ac vs bd
+
+
+```
+
+
+##### Trimming criteria
+```{r}
+# Trim bad subjects: data<-subset(data,SubjCA>=trimSubjCA)
+# No trimming: trimSubjCA <- 0
+trimSubjCA <- 200/3
+# Trim bad subjects: data<-subset(data,SubjExptCA>=trimSubjExptCA)
+# No trimming: trimSubjExptCA <- 0
+trimSubjExptCA <- 0
+
+# Trim slow subjects: data<-subset(data,SubjRTZS<trimSubjRTZS)
+# (Virtually) No trimming: trimSubjRTZS <- 99
+trimSubjRTZS <- 3
+
+# Trim slow subjects: data<-subset(data,SubjRTmean<trimSubjRTmean)
+# (Virtually) No trimming: trimSubjRTZS <- 10000
+trimSubjRTmean <- 10000
+
+
+# Trim incorrectly answered trials?  if( trimincorrect == 1 ){ rt_data<-subset(rt_data,correct==100) }
+# No trimming: trimincorrect <- 0
+trimincorrect <- 1
+
+# Trim extreme RTs rt_data<-subset(rt_data_notrim,rt>=RTlowerbound & rt<=RTupperbound)
+# (Virtually) No trimming: upperboundRT <- 100000
+upperboundRT <- 10000
+# No trimming: upperboundRT <- 100000
+# No trimming: lowerboundRT <- 0
+lowerboundRT <- 150
+
+# Then RxC z-scores will be computed
+# Trim based on zs in each condition x region cell d<-subset(rt_data,RxCzs<trimRxCzs)
+# (Virtually) No trimming: trimRxCzs <- 99
+trimRxCzs <- 3
+
+# RT transformation
+tf <- "none"  # No transformation
+#tf <- "log"   # Log transformation
+#tf <- "log10"  # Log10 transformation
+#tf <- "negreciprocal" # Negative reciprocal *1000
+
+# Want to center the spillover? (Usually yes)
+spillovercentering <- 1
+
+# Want to z-transform the spillover?
+spilloverztransform <- 1
+
+```
+
+
+##### Exclude specific users
+```{r}
+#exsubj <- c(12,22,32,42,47,50,51)
+```
+
+
+##### Load data:
+
+```{r}
+alldata<-read.csv("alldata.csv",header=T)
+alldata<-alldata[,-1]
+alldata$item<-as.numeric(alldata$item)
+itemdata<-read.csv("itemdata.csv")
+itemdata<-itemdata[,-1]
+# 標準化（z値化）
+# 注：scale()[,1]としているのは，scale()は行列を返すので，「列1だけ出力おねがい」という意味
+itemdata$Itemvalue<-scale(itemdata$Itemvalue, center = T, scale = T)[,1]
+alldata <- merge(alldata,itemdata,all=T);
+
+```
+
+##### Exclude specific users
+```{r}
+#alldata <- subset(alldata, !(subj%in%exsubj))
+```
+
+
+
+
+Isolate the data from the relevant experiment
+=============================================
+```{r}
+data<-subset(alldata,expt==ex)
+unique(data$expt)
+```
+
+Isolate conditions 
+=============================================
+```{r}
+#data<-subset(data,cond%in%c("a","b","d","e","f","h"))
+#unique(data$cond)
+```
+
+
+
+Subj exclusion
+==============
+
+
+##### before trimming
+Subject number before trimming
+```{r}
+unique(data$subj)
+length(unique(data$subj))
+```
+
+
+##### trim by CA
+
+```{r}
+data<-subset(data,SubjCA>=trimSubjCA)
+unique(data$subj)
+length(unique(data$subj))
+data<-subset(data,SubjExptCA>=trimSubjExptCA)
+unique(data$subj)
+length(unique(data$subj))
+```
+
+#### comprehension accuracy for each condition after the subject trimming
+
+```{r}
+check<-subset(data,region==1)
+ddply(check, .(cond), summarize, mean=mean(correct))
+
+check$correct<-check$correct/100
+
+
+check$adv<-ifelse(check$cond%in%c("Dr","Ds"),1,-1) #Dur vs. nondur
+check$ideo<-ifelse(check$cond%in%c("Ds","Cs"),1,-1) #Simplex vs. Redup
+
+
+checkglm<-glm(formula = correct ~ adv*ideo, data = check, family = binomial)
+summary(checkglm)
+```
+
+
+#### mean accuracy rate for each condition
+```{r}
+cddata<-subset(data,cond =="Cs",select=c(subj, correct, region))
+cddata<-subset(cddata, region=="1")
+cddata
+```
+
+```{r}
+numsubj<-length(cddata$subj)
+sumcorrect<-sum(cddata$correct)
+sumcorrect/numsubj
+```
+
+```{r}
+cddata<-subset(data,cond =="Cr",select=c(subj, correct, region))
+cddata<-subset(cddata, region=="1")
+cddata
+```
+
+```{r}
+numsubj<-length(cddata$subj)
+sumcorrect<-sum(cddata$correct)
+sumcorrect/numsubj
+```
+
+```{r}
+cddata<-subset(data,cond =="Ds",select=c(subj, correct, region))
+cddata<-subset(cddata, region=="1")
+cddata
+```
+
+```{r}
+numsubj<-length(cddata$subj)
+sumcorrect<-sum(cddata$correct)
+sumcorrect/numsubj
+```
+
+```{r}
+cddata<-subset(data,cond =="Dr",select=c(subj, correct, region))
+cddata<-subset(cddata, region=="1")
+cddata
+```
+
+```{r}
+numsubj<-length(cddata$subj)
+sumcorrect<-sum(cddata$correct)
+sumcorrect/numsubj
+```
+
+##### trim by RTZS
+
+```{r}
+data<-subset(data,SubjRTZS<=trimSubjRTZS)
+unique(data$subj)
+length(unique(data$subj))
+```
+
+
+##### trim by RTmean
+
+```{r}
+data<-subset(data,SubjRTmean<=trimSubjRTmean)
+unique(data$subj)
+length(unique(data$subj))
+```
+
+
+
+Reading time summary
+====================
+
+```{r}
+rt_data<-data
+```
+
+##### Make sure factors are treated as factors
+```{r}
+rt_data$subj<-factor(rt_data$subj)
+rt_data$expt<-factor(rt_data$expt)
+rt_data$item<-factor(rt_data$item)
+rt_data$cond<-factor(rt_data$cond)
+rt_data$word<-factor(rt_data$word)
+```
+
+##### Correctly answered trials only? (trimincorrect)
+
+Note: if you do this trimming at this point, it precedes the z-score computation.
+
+
+
+```{r}
+before <- length(data$rt)
+before
+```
+
+
+```{r}
+rt_data<-subset(data,correct==100)
+
+```
+
+```{r}
+after <- length(rt_data$rt)
+after
+```
+
+```{r}
+(before-after)*100/before
+```
+
+##### RT trimming?  
+100msを切るRTが見受けられるのでさすがにカットしたほうが良いかと。
+```{r}
+subset(rt_data,rt<200 & region==1,c("expt","cond","region","rt"))
+subset(rt_data,rt<200 & region==2,c("expt","cond","region","rt"))
+subset(rt_data,rt<200 & region==3,c("expt","cond","region","rt"))
+subset(rt_data,rt<200 & region==4,c("expt","cond","region","rt"))
+subset(rt_data,rt<200 & region==5,c("expt","cond","region","rt"))
+subset(rt_data,rt<200 & region==6,c("expt","cond","region","rt"))
+
+subset(rt_data,rt>3000 & region==1,c("expt","cond","region","rt"))
+subset(rt_data,rt>3000 & region==2,c("expt","cond","region","rt"))
+subset(rt_data,rt>3000 & region==3,c("expt","cond","region","rt"))
+subset(rt_data,rt>3000 & region==4,c("expt","cond","region","rt"))
+subset(rt_data,rt>3000 & region==5,c("expt","cond","region","rt"))
+subset(rt_data,rt>3000 & region==6,c("expt","cond","region","rt"))
+
+tapply(rt_data$rt, rt_data$region, mean)
+tapply(rt_data$rt, paste(rt_data$region, rt_data$cond), mean)
+```
+
+rt trimming
+
+```{r}
+rt_data_notrim <- rt_data
+
+rt_data<-subset(rt_data_notrim,rt>=lowerboundRT & rt<=upperboundRT)
+
+```
+
+Generate z-scores for variable A using the scale() function
+scale(A, center = TRUE, scale = TRUE)
+
+Be aware that this z-score computation per region x cond cell is { before / after } the yes/no trimming.
+
+```{r}
+myRT <- c()
+newdataframe <- c()
+for(i in unique(rt_data$region)){   
+  for(j in unique(rt_data$cond)){
+    # abstract rt column in the region x cond cell
+    myRT <- subset(rt_data, region==i & cond==j);
+    # compute z-score; [,1]を付けるのはscale()が行列データを返すので列1だけ出力してという意味
+    myRT$RxCzs <- scale(myRT$rt, center = T, scale = T)[,1];
+    # 蓄積
+    newdataframe<-rbind(newdataframe,myRT);
+    }
+}; 
+
+rt_data <- merge(rt_data,newdataframe,all=T)
+length(unique(rt_data$subj))
+```
+
+##### check outliers
+```{r}
+bs <- rt_data[which(rt_data$RxCzs >3),]
+bs <- bs[c("subj","item","region","cond","rt","RxCzs")]
+bs[order(bs$region,bs$cond,bs$RxCzs),]
+```
+
+```{r}
+bs <- rt_data[which(rt_data$RxCzs >5),]
+bs <- bs[c("subj","item","region","cond","rt","RxCzs")]
+bs[order(bs$region,bs$cond,bs$RxCzs),]
+```
+
+
+##### rt trimming based on RxCzs
+```{r}
+tapply(rt_data$rt, paste(rt_data$region, rt_data$cond), mean)
+
+rt_data<-subset(rt_data,RxCzs<trimRxCzs)
+
+tapply(rt_data$rt, paste(rt_data$region, rt_data$cond), mean)
+mean(subset(rt_data,region==5&cond=="h")$rt)
+
+```
+
+```{r}
+(length(rt_data_notrim$rt)-length(rt_data$rt))*100/length(rt_data_notrim$rt)
+```
+
+
+##### log transform
+```{r}
+ifelse(tf=="log",rt_data$rt<-log(rt_data$rt),
+       ifelse(tf=="log10",rt_data$rt<-log10(rt_data$rt),
+              ifelse(tf=="negreciprocal",rt_data$rt<- -1000/rt_data$rt,tf<-"none")))
+
+if(tf!="none"){ tapply(rt_data$rt, paste(rt_data$region, rt_data$cond), mean) }
+
+ifelse(tf=="log",RTlabel<-"Log-transformed RTs",
+       ifelse(tf=="log10",RTlabel<-"Log_10-transformed RTs",
+              ifelse(tf=="negreciprocal",RTlabel<-"Neg-reciprocal RTs",RTlabel<-"RTs(ms)")))
+
+
+
+if(tf!="none"){ tapply(rt_data$rt, paste(rt_data$region, rt_data$cond), mean) }
+```
+
+
+##### choose spillover in accordance of the choice log transformation 
+```{r}
+# First, change the value of spilloverraw under lowerboundRT to the value of lowerboundRT because we do not overestimate the negative spillover effects
+rt_data$spilloverraw[rt_data$spilloverraw<lowerboundRT]<-lowerboundRT
+
+ifelse(tf=="log",rt_data$spillover<-log(rt_data$spilloverraw),
+       ifelse(tf=="log10",rt_data$spillover<-log10(rt_data$spilloverraw),
+              ifelse(tf=="negreciprocal",rt_data$spillover<- -1000/rt_data$spillover,rt_data$spillover<-rt_data$spilloverraw)))
+
+head(rt_data) %>%
+  dplyr::select(subj,expt,item,cond,region,rt,spilloverraw,spillover) 
+
+
+# centering
+ifelse(spilloverztransform == 1,
+       rt_data$spillover<-scale(rt_data$spillover, center=T, scale=T),
+       ifelse(spillovercentering == 1, 
+              rt_data$spillover <- scale(rt_data$spillover, center=T, scale=F),
+              rt_data$spillover <- rt_data$spillover))
+
+head(rt_data) %>%
+  dplyr::select(subj,expt,item,cond,region,rt,spilloverraw,spillover) 
+
+
+
+#if(tf!="none"){ tapply(rt_data$rt, paste(rt_data$region, rt_data$cond), mean) }
+```
+
+
+## Summary (interim)
+
+のちにtrimmingをする（かもしれない）ので，このファイルの最後でもういちどサマリーとプロットの最終盤を生成します。
+
+##### Extract data for summary
+
+###### Critical region plus 3
+```{r}
+rtg <- subset(rt_data,region<=criticalregion+crplus)
+
+```
+
+##### better comprehender?
+```{r}
+# rtg$ExptCAmedian
+# rtg$ExptCAmean
+# rtg <- subset(rtg,SubjExptCA>=ExptCAmedian)
+```
+
+
+##### summary
+
+```{r}
+# Raw rt version
+rt_data_summary <- ddply(rtg, .(cond,region), summarise, N=length(rt), mean=mean(rt), sd=sd(rt), se=sd/sqrt(N),ci=qt(0.975,df=N-1)*se)
+```
+
+##### Coding conditions for plot labels
+```{r}
+rt_data_summary$A<-ifelse(rt_data_summary$cond%in%c("Cr","Cs"),"Non-durative","Durative")
+rt_data_summary$B<-ifelse(rt_data_summary$cond%in%c("Cr","Dr"),"Reduplicated","Simplex")
+rt_data_summary$Conditions<-paste(rt_data_summary$A,rt_data_summary$B,sep=":")
+rt_data_summary$B
+
+# Change the order of the legend labels
+if( revorderA == 1 ){  
+  rt_data_summary$A<-factor(rt_data_summary$A, levels=rev(levels(factor(rt_data_summary$A))))}
+if( revorderB == 1 ){  
+  rt_data_summary$B<-factor(rt_data_summary$B, levels=rev(levels(factor(rt_data_summary$B))))
+}
+
+
+# Factor labels in the plots
+Alabel<-"Temp Adverb"  
+Blabel<-"Ideophone"  
+
+rt_data_summary
+#rrt_data_summary
+```
+
+
+## Plots
+
+See the following references for ggplot codes:
+
+http://www.cookbook-r.com/Graphs/Shapes_and_line_types/
+
+http://meme.biology.tohoku.ac.jp/students/iwasaki/rstats/ggplot2.html
+
+
+##### Mean RTs
+Base
+```{r}
+g <- ggplot(rt_data_summary,aes(x=region,y=mean,group=Conditions))
+```
+
+Add lines
+```{r}
+g <- g + geom_line(size=1,aes(linetype=A),position = position_dodge(.3))
+g <- g + scale_linetype_manual(values=c("dotdash","solid"))
+g <- g + labs(linetype=Alabel)
+```
+
+Add points
+```{r}
+g <- g + geom_point(size=5,aes(shape=B,fill=B),position = position_dodge(.3))
+g <- g + scale_shape_manual(values=c(21,24,24,25))
+g <- g + scale_fill_manual(values=c("white","black","white","black"))
+g <- g + labs(shape=Blabel)
+g <- g + labs(fill=Blabel)
+```
+
+
+
+Add error bars
+```{r}
+g <- g + geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.3,position = position_dodge(.3))
+```
+
+Adjust x-axis breaks and labels
+```{r}
+g <- g + scale_x_continuous(breaks=seq(1, 8, by=1),labels=c("Subj", "Temp Adv",
+                              "Mod", "Ideophone", "Verb", "6","7","8"))
+
+```
+
+Create Theme
+
+```{r}
+g <- g + theme(      
+                 # 背景を消す
+                 panel.background = element_rect(fill = "white"),
+                 panel.border = element_blank(), axis.line = element_line(),
+                 # 凡例の設定
+                 legend.position    = c(1, 1),
+                 legend.justification = c(1,1),
+                 #legend.title = element_blank(), 
+                 legend.title = element_text(family = "Times", size = 15),
+                 legend.text = element_text(size = 15, family="Times"),
+                 legend.key = element_blank(), 
+                 # テキスト形式の設定
+                 axis.title.x = element_text(family = "Times", size = 20), 
+                 axis.title.y = element_text(family = "Times",size = 20), 
+                 axis.text.x = element_text(angle =   45, size = 15, hjust = 1,family = "Times"), 
+                 axis.text.y = element_text(size = 15, hjust = 0.5, family = "Times"),
+              )
+
+```
+
+
+Adjust appearance
+```{r}
+#g <- g + theme_classic(base_size=20, base_family="HiraKakuProN-W3")
+#g <- g + theme(base_size=20, base_family="Times", axis.text.x = element_text(angle = 45, hjust = 1))
+g <- g + labs(x="Region", y="RT (ms)")
+print(g)
+ggsave("Figure6_RawRT.png")
+```
+
+
+##### Interaction
+Base
+```{r}
+rtg <- subset(rt_data_summary,region==criticalregion)
+g <- ggplot(rtg,aes(x=A,y=mean,group=Conditions))
+```
+
+Add lines
+```{r}
+g <- g + geom_line(size=1,aes(group=B,linetype=B))
+g <- g + scale_linetype_manual(values=c("dotdash","solid"))
+g <- g + labs(linetype=Blabel)
+```
+
+Add points
+```{r}
+g <- g + geom_point(size=8,aes(shape=B,fill=B),position = position_dodge(.2))
+g <- g + scale_shape_manual(values=c(21,24,24,25))
+g <- g + scale_fill_manual(values=c("white","black","white","black"))
+g <- g + labs(shape=Blabel)
+g <- g + labs(fill=Blabel)
+```
+
+Add error bars
+```{r}
+g <- g + geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci), width=.1,position = position_dodge(.2))
+```
+
+Adjust x-axis breaks
+```{r}
+#g <- g + scale_x_continuous(breaks=seq(1, 10, by=1))
+```
+
+Adjust appearance
+```{r}
+g <- g + theme_classic(base_size=20, base_family="HiraKakuProN-W3")
+g <- g + theme_classic(base_size=20, base_family="Times")
+g <- g + theme(aspect.ratio = 1) #Ratio of y-bar to x-bar=1
+g <- g + labs(x="Temporal adverb", y=RTlabel)
+print(g)
+ggsave("Figure7_R4.png")
+```
+
+
+
+
+##### Interaction
+Base
+```{r}
+rtg <- subset(rt_data_summary,region==criticalregion+1)
+g <- ggplot(rtg,aes(x=A,y=mean,group=Conditions))
+```
+
+Add lines
+```{r}
+g <- g + geom_line(size=1,aes(group=B,linetype=B))
+g <- g + scale_linetype_manual(values=c("dotdash","solid"))
+g <- g + labs(linetype=Blabel)
+```
+
+Add points
+```{r}
+g <- g + geom_point(size=8,aes(shape=B,fill=B),position = position_dodge(.2))
+g <- g + scale_shape_manual(values=c(21,24,24,25))
+g <- g + scale_fill_manual(values=c("white","black","white","black"))
+g <- g + labs(shape=Blabel)
+g <- g + labs(fill=Blabel)
+```
+
+Add error bars
+```{r}
+g <- g + geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci), width=.1,position = position_dodge(.2))
+```
+
+Adjust x-axis breaks
+```{r}
+#g <- g + scale_x_continuous(breaks=seq(1, 10, by=1))
+```
+
+Adjust appearance
+```{r}
+g <- g + theme_classic(base_size=20, base_family="HiraKakuProN-W3")
+g <- g + theme_classic(base_size=20, base_family="Times")
+g <- g + theme(aspect.ratio = 1) #Ratio of y-bar to x-bar=1
+g <- g + labs(x="Temporal abverb", y=RTlabel)
+print(g)
+ggsave("Figure8_R5.png")
+```
+
+
+##### Interaction
+Base
+```{r}
+rtg <- subset(rt_data_summary,region==criticalregion+2)
+g <- ggplot(rtg,aes(x=A,y=mean,group=Conditions))
+```
+
+Add lines
+```{r}
+g <- g + geom_line(size=1,aes(group=B,linetype=B))
+g <- g + scale_linetype_manual(values=c("dotdash","solid"))
+g <- g + labs(linetype=Blabel)
+```
+
+Add points
+```{r}
+g <- g + geom_point(size=8,aes(shape=B,fill=B), position = position_dodge(.2))
+g <- g + scale_shape_manual(values=c(21,24,24,25))
+g <- g + scale_fill_manual(values=c("white","black","black","white"))
+g <- g + labs(shape=Blabel)
+g <- g + labs(fill=Blabel)
+```
+
+Add error bars
+```{r}
+g <- g + geom_errorbar(aes(ymin=mean-ci, ymax=mean+ci), width=.1, position = position_dodge(.2))
+```
+
+Adjust x-axis breaks
+```{r}
+#g <- g + scale_x_continuous(breaks=seq(1, 10, by=1))
+```
+
+Adjust appearance
+```{r}
+g <- g + theme_classic(base_size=20, base_family="HiraKakuProN-W3")
+g <- g + theme_classic(base_size=20, base_family="Times")
+g <- g + theme(aspect.ratio = 1) #Ratio of y-bar to x-bar=1
+g <- g + labs(x="Temporal adverb", y=RTlabel)
+print(g)
+ggsave("Figure9_R6.png")
+```
+
+##### Plot the mean RTs against Itemvalue
+```{r}
+itemvaluedata <- subset(rt_data,region<=criticalregion+crplus)
+
+itemvalue_data_summary <- ddply(itemvaluedata, .(Itemvalue,cond,region), summarise, N=length(rt), mean=mean(rt), sd=sd(rt), se=sd/sqrt(N),ci=qt(0.975,df=N-1)*se)
+```
+
+```{r}
+cregion <- subset(itemvalue_data_summary,region==criticalregion+1)
+g <- ggplot(cregion,aes(x=Itemvalue,y=mean,shape=cond,fill=cond,linetype=cond))
+g <- g + geom_point()
+
+# Manually specify the shapes, colors, linetypes
+#g <- g + scale_shape_manual(values=c(25,22))
+#g <- g + scale_fill_manual(values=c("grey","black"))
+#g <- g + scale_linetype_manual(values=c("dashed","solid"))
+
+# smoother
+g <- g + geom_smooth(method="lm",colour="black",size=0.5)
+
+# theme
+g <- g + theme_classic(base_size=20, base_family="Times")
+
+# labels
+g <- g + xlab("Itemvalue")
+g <- g + ylab("RTs")
+g <- g + labs(type="Dependency type")
+
+print(g)
+```
+
+
+
+
+
+##### Plot the mean RTs against Itemvalue: Nondurative only
+```{r}
+itemvaluedata <- subset(rt_data,region<=criticalregion+crplus)
+
+itemvalue_data_summary <- ddply(itemvaluedata, .(Itemvalue,cond,region), summarise, N=length(rt), mean=mean(rt), sd=sd(rt), se=sd/sqrt(N),ci=qt(0.975,df=N-1)*se)
+```
+
+```{r}
+cregion <- subset(itemvalue_data_summary,region==criticalregion+1)
+cregion <- subset(cregion, cond=="Cr"|cond=="Cs")
+g <- ggplot(cregion,aes(x=Itemvalue,y=mean,shape=cond,fill=cond,linetype=cond))
+g <- g + geom_point()
+
+# Manually specify the shapes, colors, linetypes
+#g <- g + scale_shape_manual(values=c(25,22))
+#g <- g + scale_fill_manual(values=c("grey","black"))
+#g <- g + scale_linetype_manual(values=c("dashed","solid"))
+
+# smoother
+g <- g + geom_smooth(method="lm",colour="black",size=0.5)
+
+# theme
+g <- g + theme_classic(base_size=20, base_family="Times")
+
+# labels
+g <- g + xlab("Itemvalue")
+g <- g + ylab("RTs")
+g <- g + labs(type="Dependency type")
+
+print(g)
+```
+
+
+
+### Analysis 
+
+
+
+Coding factors 
+-------------------------------
+
+##### CONDITIONS:
+
+```{r}
+rt_data$Adv<-ifelse(rt_data$cond%in%c("Dr","Ds"),1,-1)
+rt_data$Ideo<-ifelse(rt_data$cond%in%c("Ds","Cs"),1,-1)
+
+# For pairwise comparisons
+rt_data$simplexVSredup_dur <-ifelse(rt_data$Adv==1,
+                          ifelse(rt_data$Ideo==1,1,-1),
+                          0)
+rt_data$simplexVSredup_nondur <-ifelse(rt_data$Adv==-1,
+                          ifelse(rt_data$Ideo==1,1,-1),
+                          0)
+rt_data$durVSnondur_simplex <-ifelse(rt_data$Ideo==1,
+                          ifelse(rt_data$Adv==1,1,-1),
+                          0)
+rt_data$durVSnondur_redup <-ifelse(rt_data$Ideo==-1,
+                          ifelse(rt_data$Adv==1,1,-1),
+                          0)
+
+
+
+```
+
+rt_data check
+```{r}
+dc <- subset(rt_data,cond=="Cr",c(cond,word,Adv,Ideo))
+head(dc, n=7)
+dc <- subset(rt_data,cond=="Cs",c(cond,word,Adv,Ideo))
+head(dc, n=7)
+dc <- subset(rt_data,cond=="Dr",c(cond,word,Adv,Ideo))
+head(dc, n=7)
+dc <- subset(rt_data,cond=="Ds",c(cond,word,Adv,Ideo))
+head(dc, n=7)
+
+```
+
+
+
+
+##### Make sure factors are treated as factors
+```{r}
+rt_data$subj<-factor(rt_data$subj)
+rt_data$expt<-factor(rt_data$expt)
+rt_data$item<-factor(rt_data$item)
+rt_data$cond<-factor(rt_data$cond)
+rt_data$word<-factor(rt_data$word)
+```
+
+#### Critical(Ideophone) region 
+```{r}
+cregion<-subset(rt_data,region==criticalregion)
+```
+
+##### Check words
+```{r}
+sort(unique(cregion$word))
+```
+
+
+##### Max model
+
+
+```{r}
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+
+```
+
+
+
+
+#### Verb region
+```{r}
+cregion<-subset(rt_data,region==criticalregion+1)
+```
+
+##### Check words
+```{r}
+sort(unique(cregion$word))
+```
+
+
+
+##### Max model
+
+
+```{r}
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+```
+
+```{r}
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+Adv:Itemvalue+Ideo:Itemvalue+Adv:Ideo:Itemvalue+Itemvalue+
+           (1+Adv+Ideo+Adv:Ideo+Adv:Itemvalue+Ideo:Itemvalue+Adv:Ideo:Itemvalue+Itemvalue|subj),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+```
+
+
+```{r}
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+Adv:Itemvalue+Ideo:Itemvalue+Adv:Ideo:Itemvalue+Itemvalue+
+           (1+Adv+Ideo+Adv:Ideo|subj),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+```
+
+```{r}
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+Adv:Itemvalue+Ideo:Itemvalue+Adv:Ideo:Itemvalue+Itemvalue+
+           (1+Adv+Ideo+Adv:Ideo|subj),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+(step_res <- step(mm, reduce.fixed = T))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+```
+
+#### Ideo x itemvalue in non-durative
+
+```{r}
+
+mm<-lmer(rt~simplexVSredup_dur:Itemvalue+simplexVSredup_nondur:Itemvalue+Adv+Ideo+Itemvalue+Adv:Itemvalue+Adv:Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+```
+
+
+```{r}
+
+ndcregion <- subset(cregion, Adv==-1)
+
+mm<-lmer(rt~Ideo+Ideo:Itemvalue+Itemvalue+
+           (1+Ideo+Ideo:Itemvalue+Itemvalue|subj),
+           control=lmerControl(optimizer="bobyqa"),
+           ndcregion)
+summary(mm)
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+```
+
+##### Post hoc multiple pairwise comparisons to test the interaction
+```{r}
+mmm<-lmer(rt~simplexVSredup_dur+simplexVSredup_nondur+Adv+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mmm)
+
+(step_res <- step(mmm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+
+```
+
+```{r}
+mmm<-lmer(rt~durVSnondur_simplex+durVSnondur_redup+Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mmm)
+
+(step_res <- step(mmm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+
+```
+####Singleverb 
+```{r}
+singlev<-subset(cregion,Itemvalue<0)
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           singlev)
+summary(mm)
+
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+
+```
+
+####Plural verb 
+```{r}
+pluralv<-subset(cregion,Itemvalue>=0)
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           pluralv)
+summary(mm)
+
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+
+```
+
+
+
+
+#### Spillover region
+```{r}
+cregion<-subset(rt_data,region==criticalregion+2)
+```
+
+##### Check words
+```{r}
+sort(unique(cregion$word))
+```
+
+
+##### Max model
+
+
+```{r}
+mm<-lmer(rt~Adv+Ideo+Adv:Ideo+
+           (1+Adv+Ideo+Adv:Ideo|subj)+(1+Adv+Ideo+Adv:Ideo|item),
+           control=lmerControl(optimizer="bobyqa"),
+           cregion)
+summary(mm)
+
+(step_res <- step(mm, reduce.fixed = F))
+final <- get_model(step_res)
+summary(final)
+anova(final)
+
+
+```
+
+
+
+
+
