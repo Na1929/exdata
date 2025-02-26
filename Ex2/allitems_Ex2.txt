@@ -1,0 +1,73 @@
+This file contains the target items for Experiment 2 and their English translations. Because ideophones (given in the second curly brackets) cannot be directly translated in English, their translations are merged with the verbs, and all the reduplicated ideophones coupled with the verbs are translated in the form "kept V-ing".
+
+1. 生徒が {しばらく|その時} 黒板を {ちらっと|ちらちら} 見たので 先生が カンニングを 疑った。  
+   `{For a while|At that moment}, the student {glanced|kept glancing} at the blackboard, so the teacher suspected cheating.`  
+
+2. 稲妻が {しばらく|その時} 遠くで {ぴかっと|ぴかぴか} 光ったので 子供が 大声で 泣いた。  
+   `{For a while|At that moment}, lightning {flashed|kept flashing} in the distance, so the child cried out loudly.`  
+
+3. 幼稚園児が {しばらく|その時} 枝を {ポキッと|ポキポキ} 折ったので 母親が その場で 怒った。  
+   `{For a while|At that moment}, the kindergartener {snapped|kept snapping} a branch, so the mother got angry on the spot.`  
+
+4. 販売員が {しばらく|その時} まぶしそうに {ぱちっと|ぱちぱち} まばたきしたので 店長が 電気を 消した。  
+   `{For a while|At that moment}, the salesperson {blinked|kept blinking} as if dazzled, so the store manager turned off the lights.`  
+
+5. 患者が {しばらく|その時} つらそうに {ごほっと|ごほごほ} 咳き込んだので 看護師が 冷房を 弱めた。  
+   `{For a while|At that moment}, the patient {coughed|kept coughing} painfully, so the nurse turned down the air conditioning.`  
+
+6. 建物が {しばらく|その時} 大きく {ぐらっと|ぐらぐら} 揺れたので 祖母は 少し 不安になった。  
+   `{For a while|At that moment}, the building {shook|kept shaking} violently, so the grandmother became a little anxious.`  
+
+7. 社長が {しばらく|その時} 丁寧に {ぺこっと|ぺこぺこ} お辞儀したので 社員は 非常に 驚いた。  
+   `{For a while|At that moment}, the president {bowed slightly|kept bowing slightly} politely, so the employees were very surprised.`  
+
+8. 刑事が {しばらく|その時} 犯人に {バンッと|バンバン} 発砲したので 通行人は 声を あげた。  
+   `{For a while|At that moment}, the detective {fired a shot|kept firing shots} at the suspect, so the passersby screamed.`  
+
+9. 調理師が {しばらく|その時} 肉を {ぐさっと|ぐさぐさ} 刺したので 一瞬で 台所が 散らかった。  
+   `{For a while|At that moment}, the chef {stabbed|kept stabbing} the meat, making the kitchen messy in an instant.`  
+
+10. 傷が {しばらく|その時} 刺すように {ずきっと|ずきずき} 痛んだので 午前中に 病院へ 行った。  
+   `{For a while|At that moment}, the wound {throbbed sharply|kept throbbing}, so I went to the hospital in the morning.`  
+
+11. 小学生が {しばらく|その時} 教科書を {ぱらっと|ぱらぱら} めくったので 紙が 机から 落ちた。  
+   `{For a while|At that moment}, the elementary student {flipped|kept flipping} through the textbook, so a paper fell from the desk.`  
+
+12. その老人が {しばらく|その時} 玉ねぎを {ざくっと|ざくざく} 切ったので 目が かなり 赤くなった。  
+   `{For a while|At that moment}, the old man {chopped|kept chopping} onions, making his eyes quite red.`  
+
+13. パティシエが {しばらく|その時} 生地を {ぐるっと|ぐるぐる} 混ぜたので ケーキが 美味しく 出来上がった。  
+   `{For a while|At that moment}, the pastry chef {stirred|kept stirring} the batter, making the cake turn out delicious.`  
+
+14. 陸上選手が {しばらく|その時} ハードルを {ピョンと|ピョンピョン} 飛び越えたので 激しく 足を くじいた。  
+   `{For a while|At that moment}, the track athlete {hopped over|kept hopping over} the hurdles and sprained their foot badly.`  
+
+15. 子供が {しばらく|その時} 鼻を {ズルッと|ズルズル} すすったので すぐに 薬を 飲ませた。  
+   `{For a while|At that moment}, the child {sniffled|kept sniffling}, so I immediately gave them medicine.`  
+
+16. バレリーナが {しばらく|その時} 舞台で {クルッと|クルクル} 回ったので 会場で 歓声が あがった。  
+   `{For a while|At that moment}, the ballerina {spun|kept spinning} on stage, making the audience cheer.`  
+
+17. 母親が {しばらく|その時} 皿を {キュッと|キュキュッと} 拭いたので 台所が 綺麗に 片付いた。  
+   `{For a while|At that moment}, the mother {wiped|kept wiping} the dishes, making the kitchen clean and tidy.`  
+
+18. 女優が {しばらく|その時} 涙を {ポロッと|ポロポロ} 流したので プロデューサーが 会話を やめた。  
+   `{For a while|At that moment}, the actress {shed a tear|kept shedding tears}, so the producer stopped talking.`  
+
+19. 隣人が {しばらく|その時} ドアノブを {カチャッと|カチャカチャ} 回したので 警察に 届けを 出した。  
+   `{For a while|At that moment}, the neighbor {turned|kept turning} the doorknob {once|repeatedly}, so the police were notified.`  
+
+20. 係員が {しばらく|その時} 手を {バンッと|バンバン} 叩いたので 全員が フロントに 集合した。  
+   `{For a while|At that moment}, the staff member {clapped|kept clapping} their hands, making everyone gather at the front.`  
+
+21. 野球部員が {しばらく|その時} バットを {ぶんっと|ぶんぶん} 振ったので コーチが 部屋から 出てきた。  
+   `{For a while|At that moment}, the baseball player {swung|kept swinging} the bat, so the coach came out of the room.`  
+
+22. ボクサーが {しばらく|その時} 指を {ボキッと|ボキボキ} 鳴らしたので 対戦相手が 顔を 強張らせた。  
+   `{For a while|At that moment}, the boxer {cracked|kept cracking} their fingers, making their opponent tense up.`  
+
+23. 女生徒が {しばらく|その時} 写真を {ぱしゃっと|ぱしゃぱしゃ} 撮ったので 風紀委員が 学年主任に 報告した。  
+   `{For a while|At that moment}, the female student {took|kept taking} pictures, so the discipline committee reported it to the grade director.`  
+
+24. アルバイトが {しばらく|その時} ネギを {サクッと|サクサク} 刻んだので 主任が 容器を 準備した。  
+   `{For a while|At that moment}, the part-time worker {chopped|kept chopping} green onions, so the supervisor prepared a container.`  
