@@ -1,0 +1,73 @@
+This file contains the target items for Experiment 1 and their English translations. Because ideophones (given in the second curly brackets) cannot be directly translated in English, their translations are merged with the verbs, and all the reduplicated ideophones coupled with the verbs are translated in the form "kept V-ing".
+
+1. {1分間|1分後} 生徒が {ちらっと|ちらちら} 黒板を 見たので 先生が カンニングを 疑った。  
+   `{For one minute|After one minute} the student {glanced|kept glancing} at the blackboard, so the teacher suspected cheating.`  
+
+2. {1分間|1分後} 稲妻が {ぴかっと|ぴかぴか} 遠くで 光ったので 子供が 大声で 泣いた。  
+   `{For one minute|After one minute} lightning {flashed|kept flashing} in the distance, so the child cried out loudly.`  
+
+3. {10分間|10分後} 幼稚園児が {ぺたっと|ぺたぺた} シールを 貼ったので 母親が その場で 怒った。  
+   `{For ten minutes|After ten minutes} the kindergartener {stuck|kept sticking} stickers, so the mother got angry on the spot.`  
+
+4. {10秒間|10秒後} 販売員が {ぱちっと|ぱちぱち} まぶしそうに まばたきしたので 店長が 電気を 消した。  
+   `{For ten seconds|After ten seconds} the salesperson {blinked|kept blinking} as if dazzled, so the store manager turned off the lights.`  
+
+5. {1分間|1分後} 患者が {ごほっと|ごほごほ} しんどそうに 咳こんだので 看護師が 冷房を 弱めた。  
+   `{For one minute|After one minute} the patient {coughed|kept coughing} weakly, so the nurse turned down the air conditioning.`  
+
+6. {10秒間|10秒後} 建物が {ぐらっと|ぐらぐら} 大きく 揺れたので 祖母は 少し 不安になった。  
+   `{For ten seconds|After ten seconds} the building {shook|kept shaking} violently, so the grandmother became a little anxious.`  
+
+7. {10秒間|10秒後} 社長が {ぺこっと|ぺこぺこ} 丁寧に お辞儀したので 社員は 非常に 驚いた。  
+   `{For ten seconds|After ten seconds} the president {bowed slightly|kept bowing slightly} politely, so the employees were very surprised.`  
+
+8. {3分間|3分後} 刑事が {バンッと|バンバンと} 犯人に 発砲したので 通行人は 声を あげた。  
+   `{For three minutes|After three minutes} the detective {fired a shot|kept firing shots} at the suspect, so the passersby screamed.`  
+
+9. {3分間|3分後} 調理師が {ぐさっと|ぐさぐさ} 肉を 刺したので 一瞬で 台所が 散らかった。  
+   `{For three minutes|After three minutes} the chef {stabbed|kept stabbing} the meat, making the kitchen messy in an instant.`  
+
+10. {1分間|1分後} 傷が {ずきっと|ずきずき} 刺すように 痛んだので 午前中に 病院へ 行った。  
+   `{For one minute|After one minute} the wound {throbbed sharply|kept throbbing}, so I went to the hospital in the morning.`  
+
+11. {1分間|1分後} 小学生が {ぱらっと|ぱらぱら} 教科書を めくったので 紙が 机から 落ちた。  
+   `{For one minute|After one minute} the elementary student {flipped|kept flipping} through the textbook, so a paper fell from the desk.`  
+
+12. {30分間|30分後} その老人が {ざくっと|ざくざく} 玉ねぎを 切ったので 目が かなり 赤くなった。  
+   `{For thirty minutes|After thirty minutes} the old man {chopped|kept chopping} onions, making his eyes quite red.`  
+
+13. {5分間|5分後} パティシエが {ぐるっと|ぐるぐる} 生地を 混ぜたので ケーキが 美味しく 出来上がった。  
+   `{For five minutes|After five minutes} the pastry chef {stirred|kept stirring} the batter, making the cake turn out delicious.`  
+
+14. {1分間|1分後} 陸上選手が {ピョンと|ピョンピョン} ハードルを 飛び越えたので 激しく 足を くじいた。  
+   `{For one minute|After one minute} the track athlete {hopped over|kept hopping over} the hurdles and sprained their foot badly.`  
+
+15. {30秒間|30秒後} 子供が {ズルッと|ズルズル} 鼻を すすったので すぐに 薬を 飲ませた。  
+   `{For thirty seconds|After thirty seconds} the child {sniffled|kept sniffling}, so I immediately gave them medicine.`  
+
+16. {1分間|1分後} バレリーナが {クルッと|クルクル} 舞台で 回ったので 会場で 歓声が あがった。  
+   `{For one minute|After one minute} the ballerina {spun|kept spinning} on stage, making the audience cheer.`  
+
+17. {30秒間|30秒後} 母親が {キュッと|キュキュッと} 皿を 拭いたので 台所が 綺麗に 片付いた。  
+   `{For thirty seconds|After thirty seconds} the mother {wiped|kept wiping} the dishes, making the kitchen clean and tidy.`  
+
+18. {3分間|3分後} 先生が {バタンと|バタンバタン} 扉を 閉めたので 保護者が 会話を やめた。  
+   `{For three minutes|After three minutes} the teacher {shut|kept shutting} the door loudly, so the parents stopped talking.`  
+
+19. {3分間|3分後} 清掃員が {ガチャンと|ガチャンガチャンと} 花瓶を 割ったので 警察に 届けを 出した。  
+   `{For three minutes|After three minutes} the janitor {broke|kept breaking} the vase with a crash, so they reported it to the police.`  
+
+20. {1分間|1分後} 係員が {パンッと|パンパンと} 手を 叩いたので 全員が フロントに 集合した。  
+   `{For one minute|After one minute} the staff member {clapped|kept clapping} their hands, making everyone gather at the front.`  
+
+21. {1分間|1分後} 野球部員が {ぶんっと|ぶんぶん} バットを 振ったので コーチが 部室から 出てきた。  
+   `{For one minute|After one minute} the baseball player {swung|kept swinging} the bat, so the coach came out of the clubroom.`  
+
+22. {1分間|1分後} ボクサーが {ボキッと|ボキボキ} 指を 鳴らしたので 対戦相手が 顔を 強張らせた。  
+   `{For one minute|After one minute} the boxer {cracked|kept cracking} their fingers, making their opponent tense up.`  
+
+23. {10秒間|10秒後} 女生徒が {ぱしゃっと|ぱしゃぱしゃ} 写真を 撮ったので 風紀委員が 学年主任に 報告した。  
+   `{For ten seconds|After ten seconds} the female student {took|kept taking} pictures, so the discipline committee reported it to the grade director.`  
+
+24. {3分間|3分後} 立て看板が {ばたっと|ばたばた} 道路に 倒れたので 委員長が 急いで 直した。  
+   `{For three minutes|After three minutes} the signboard {fell|kept falling} onto the road, so the committee chair hurried to fix it.`
